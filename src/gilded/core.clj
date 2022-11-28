@@ -67,13 +67,16 @@
           degradation (* base-degradation degradation-rate)]
       (max 0 (- quality degradation)))))
 
-(def rules {"Aged Brie"
+(def rules {:default
+            {:quality (make-quality-degrader 1)
+             :sell-in dec
+             :max-quality 50}
+
+            "Aged Brie"
             {:quality (make-quality-degrader -1)}
 
-            "Sulfuras, Hand of Ragnaros"
-            {:quality :quality
-             :sell-in identity
-             :max-quality identity}
+            "Conjured Mana Cake"
+            {:quality (make-quality-degrader 2)}
 
             "Backstage passes to a TAFKAL80ETC concert"
             {:quality (fn [{:keys [quality sell-in]}]
@@ -83,13 +86,10 @@
                           10 (+ 2 quality)
                           (inc quality)))}
 
-            "Conjured Mana Cake"
-            {:quality (make-quality-degrader 2)}
-
-            :default
-            {:quality (make-quality-degrader 1)
-             :sell-in dec
-             :max-quality #(min 50 %)}})
+            "Sulfuras, Hand of Ragnaros"
+            {:quality :quality
+             :sell-in identity
+             :max-quality ##Inf}})
 
 (defn get-updater [item key]
              (or (get-in rules [(:name item) key])
@@ -98,8 +98,8 @@
 (defn update-item [item] 
   (-> item
       (update-in [:sell-in] (get-updater item :sell-in))
-      (assoc :quality ((get-updater item :quality) item))
-      (update-in [:quality] (get-updater item :max-quality))))
+      (assoc      :quality ((get-updater item :quality) item))
+      (update-in [:quality] #(min % (get-updater item :max-quality)))))
 
 (defn update-quality! [store]
   (doseq [item store]
