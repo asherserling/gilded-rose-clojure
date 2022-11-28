@@ -57,6 +57,8 @@
   (->> store
        (map deref))) 
 
+;; up till here is the original code
+
 (defn make-quality-degrader [degradation-rate]
   (fn [{:keys [quality sell-in]}]
     (let [base-degradation (if (> sell-in 0)
