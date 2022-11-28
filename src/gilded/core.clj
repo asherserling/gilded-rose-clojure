@@ -10,8 +10,9 @@
   (->> store
        (map deref)))
 ;; ---
-
-(defn update-quality! [store]
+;; this is the original function, i kept it around for the purpose of 
+;; the test 'test-with-original-fixture' in core_test.clj
+(defn original-update-quality! [store] 
   (doseq [item store]
     (if (and (not (= (:name @item)
                      "Aged Brie"))
@@ -54,8 +55,7 @@
 
 (defn item-seq [store]
   (->> store
-       (map deref)))
-;; ---
+       (map deref))) 
 
 (defn make-quality-degrader [degradation-rate]
   (fn [{:keys [quality sell-in]}]
@@ -99,6 +99,6 @@
       (assoc :quality ((get-updater item :quality) item))
       (update-in [:quality] (get-updater item :max-quality))))
 
-(defn my-update-quality! [store]
+(defn update-quality! [store]
   (doseq [item store]
     (reset! item (update-item @item))))

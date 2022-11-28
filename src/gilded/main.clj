@@ -29,7 +29,7 @@
     (dotimes [day n-days]
       (println "-------- day" day "--------")
       (print-store store)
-      (x/my-update-quality! store))))
+      (x/update-quality! store))))
 
 (comment 
   (-main "10"))

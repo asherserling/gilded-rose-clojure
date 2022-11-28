@@ -19,8 +19,8 @@
                           {:name "Backstage passes to a TAFKAL80ETC concert", :quality 20, :sell-in 15}
                           {:name "Backstage passes to a TAFKAL80ETC concert", :quality 49, :sell-in 10}
                           {:name "Backstage passes to a TAFKAL80ETC concert", :quality 49, :sell-in 5}]]
-    (is (= (make-store-update-n-times x/update-quality! original-fixture 100)
-           (make-store-update-n-times x/my-update-quality! original-fixture 100)))))
+    (is (= (make-store-update-n-times x/original-update-quality! original-fixture 100)
+           (make-store-update-n-times x/update-quality! original-fixture 100)))))
 
 (deftest regular-item-decreases-by-1-before- 
   (let [item {:name "foo" :quality 10 :sell-in 2}
